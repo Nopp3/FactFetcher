@@ -1,4 +1,4 @@
-namespace FactFetcher.Services.Catfact;
+namespace FactFetcher.DTOs;
 
 public class Catfact
 {
