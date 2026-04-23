@@ -1,5 +1,6 @@
 using FactFetcher.Services.Catfact;
 using FactFetcher.Services.Storage;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,13 @@ app.MapPost("/fact", async (ICatfactService catfactService, IFileService fileSer
     var content = $"{catfact.Fact} | Length: {catfact.Length}";
     await fileService.AppendLineAsync("result.txt", content, cancellationToken);
     return Results.Ok("Correctly added: " + content);
+});
+
+app.MapGet("/fact", async (IFileService fileService, CancellationToken cancellationToken) =>
+{
+    var content = await  fileService.ReadAllTextAsync("result.txt", cancellationToken);
+    
+    return string.IsNullOrEmpty(content) ? Results.NoContent() : Results.Text(content, "text/plain; charset=utf-8");
 });
 
 app.Run();

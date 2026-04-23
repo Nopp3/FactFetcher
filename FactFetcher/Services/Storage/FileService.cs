@@ -10,4 +10,11 @@ public class FileService(IWebHostEnvironment webHostEnvironment) : IFileService
         
         await File.AppendAllTextAsync(filePath, content + "\n", cancellationToken);
     }
+
+    public async Task<string> ReadAllTextAsync(string fileName, CancellationToken cancellationToken)
+    {
+        var filePath = Path.Combine(webHostEnvironment.ContentRootPath, ".runtime", fileName);
+           
+        return File.Exists(filePath) ? await File.ReadAllTextAsync(filePath, cancellationToken) : string.Empty;
+    }
 }
